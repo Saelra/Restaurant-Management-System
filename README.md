@@ -14,12 +14,12 @@ A full-stack web application built with React and Firebase to manage menu items 
 ## Table of Contents
 
 - [Setup](#setup)
-- [Usage Examples](#usage-examples)
+- [Usage](#usage)
 
 ## Setup
 - **Node.js** and **npm** installed
 
-# Usage Examples
+# Usage
 The **Restaurant Management System** is a React-based web application designed to help restaurant owners easily manage their menu items.
 With features like adding, editing, and deleting menu items, this app allows users to maintain a dynamic and up-to-date menu.
 The app integrates with **Firebase** for real-time data synchronization, ensuring that any changes made in the app are instantly reflected across all connected devices.
