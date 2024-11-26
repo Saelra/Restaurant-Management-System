@@ -151,6 +151,10 @@ button:active {
   transform: scale(0.98);
 }
 
+.login button {
+  margin: 10px;
+}
+
 /* Menu Item and List Styles */
 .menu-item {
   background-color: var(--secondary-color);

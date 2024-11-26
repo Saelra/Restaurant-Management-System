@@ -11,6 +11,7 @@ import { getDatabase, ref, get, set } from "firebase/database";
 import {
   getAuth,
   GithubAuthProvider,
+  GoogleAuthProvider,
   signInWithPopup,
   signOut,
 } from "firebase/auth";
@@ -30,6 +31,7 @@ const firebaseApp = initializeApp(firebaseConfig);
 const database = getDatabase(firebaseApp);
 const auth = getAuth(firebaseApp);
 const githubProvider = new GithubAuthProvider();
+const googleProvider = new GoogleAuthProvider(); // Initialize Google Auth Provider
 
 /**
  * Signs in a user with GitHub.
@@ -43,6 +45,21 @@ const signInWithGitHub = async () => {
   } catch (error) {
     console.error("GitHub sign-in error:", error.message);
     throw new Error("Failed to sign in with GitHub");
+  }
+};
+
+/**
+ * Signs in a user with Google.
+ * @returns {Promise<import("firebase/auth").User>} A promise resolving to the signed-in user object.
+ * @throws {Error} If the sign-in process fails.
+ */
+const signInWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    return result.user; // Returns the authenticated user
+  } catch (error) {
+    console.error("Google sign-in error:", error.message);
+    throw new Error("Failed to sign in with Google");
   }
 };
 
@@ -103,6 +120,7 @@ export {
   database,
   auth,
   signInWithGitHub,
+  signInWithGoogle,
   signOutUser,
   fetchMenuItems,
   updateMenuItem,
