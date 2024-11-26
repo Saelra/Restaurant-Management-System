@@ -1,15 +1,24 @@
+/**
+ * @description
+ * Global styles for the Restaurant Management System, defining the layout and theme using CSS variables.
+ * 
+ * @author
+ * Ratanachat Saelee
+ */
+
 :root {
-  --primary-color: #6c63ff;
-  --secondary-color: #ffffff;
-  --text-color: #2c2c2c;
-  --bg-color: #f4f4f9;
-  --border-color: #e0e0e0;
-  --border-radius: 10px;
-  --transition-speed: 0.3s;
-  --shadow-color: rgba(0, 0, 0, 0.1);
-  --hover-color: rgba(108, 99, 255, 0.1);
+  --primary-color: #6c63ff; /* Primary color used throughout the site */
+  --secondary-color: #ffffff; /* Background and text color */
+  --text-color: #2c2c2c; /* Default text color */
+  --bg-color: #f4f4f9; /* Background color for the page */
+  --border-color: #e0e0e0; /* Border color for elements */
+  --border-radius: 10px; /* Default border radius for rounded corners */
+  --transition-speed: 0.3s; /* Transition speed for hover and focus effects */
+  --shadow-color: rgba(0, 0, 0, 0.1); /* Shadow color for elements */
+  --hover-color: rgba(108, 99, 255, 0.1); /* Hover effect color */
 }
 
+/* General body styling */
 body {
   margin: 0;
   padding: 0;
@@ -24,67 +33,14 @@ body {
   padding-top: 80px;
 }
 
+/* Container for page content */
 .container {
   max-width: 1100px;
   margin: 20px auto;
   padding: 20px;
 }
 
-h1,
-h2,
-h3 {
-  color: var(--primary-color);
-}
-
-h1 {
-  font-size: 2rem;
-  margin: 20px 0;
-}
-
-h3 {
-  margin: 0 0 10px;
-}
-
-.login {
-  background-color: var(--secondary-color);
-  padding: 30px 40px;
-  border-radius: var(--border-radius);
-  box-shadow: 0 4px 8px var(--shadow-color);
-  max-width: 400px;
-  width: 100%;
-  text-align: center;
-}
-
-.login h2 {
-  font-size: 2rem;
-  margin-bottom: 20px;
-}
-
-.login p.error {
-  color: red;
-  font-size: 1rem;
-  margin-bottom: 20px;
-  font-weight: bold;
-}
-
-button {
-  background-color: var(--primary-color);
-  color: var(--secondary-color);
-  border: none;
-  border-radius: 10px;
-  padding: 10px 20px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 500;
-  transition: background-color var(--transition-speed), transform 0.2s ease;
-}
-
-button:hover,
-button:active {
-  background-color: var(--primary-color);
-  transform: scale(0.98);
-}
-
+/* Header styles */
 .header {
   background-color: var(--text-color);
   padding: 20px 40px;
@@ -146,6 +102,7 @@ button:active {
   color: var(--secondary-color);
 }
 
+/* Form and Input Styling */
 form {
   background-color: var(--secondary-color);
   padding: 20px;
@@ -175,6 +132,26 @@ textarea:focus {
   outline: none;
 }
 
+/* Button Styles */
+button {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color var(--transition-speed), transform 0.2s ease;
+}
+
+button:hover,
+button:active {
+  background-color: var(--primary-color);
+  transform: scale(0.98);
+}
+
+/* Menu Item and List Styles */
 .menu-item {
   background-color: var(--secondary-color);
   padding: 20px;
@@ -215,14 +192,7 @@ textarea:focus {
   margin-top: 20px;
 }
 
-footer {
-  text-align: center;
-  margin-top: 20px;
-  padding: 10px;
-  font-size: 0.9rem;
-  color: #888;
-}
-
+/* Menu Section */
 .menu {
   font-family: Arial, sans-serif;
   background-color: var(--bg-color);

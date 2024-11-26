@@ -1,3 +1,12 @@
+/**
+ * @description
+ * The main component that manages the menu items for the Restaurant Management System.
+ * Handles fetching, adding, editing, and deleting menu items. Syncs data with Firebase and localStorage.
+ *
+ * @author
+ * Ratanachat Saelee
+ */
+
 import React, { useState, useEffect } from "react";
 import MenuList from "./MenuList";
 import AddMenuItem from "./AddMenuItem";
@@ -10,7 +19,7 @@ const App = () => {
   const [editingItem, setEditingItem] = useState(null);
   const [error, setError] = useState(null);
 
-  // Fetch menu items from Firebase and localStorage
+  // Fetch menu items from Firebase and localStorage when the component mounts
   useEffect(() => {
     const menuRef = ref(database, "menuItems");
 
@@ -19,7 +28,6 @@ const App = () => {
       setMenuItems(storedMenuItems);
     }
 
-    // Listen for changes in Firebase
     onValue(
       menuRef,
       (snapshot) => {
@@ -34,11 +42,12 @@ const App = () => {
     );
   }, []);
 
-  // Sync menu items to Firebase and localStorage whenever the menu items change
+  // Sync menu items to Firebase and localStorage whenever menuItems changes
   useEffect(() => {
     if (menuItems.length > 0) {
       const menuRef = ref(database, "menuItems");
 
+      // Save the menu items to Firebase and localStorage
       set(menuRef, menuItems)
         .then(() => {
           console.log("Menu items added to Firebase");
@@ -64,7 +73,7 @@ const App = () => {
     }
   };
 
-  // Delete a menu item
+  // Delete a menu item by its ID
   const deleteMenuItem = (id) => {
     const updatedMenuItems = menuItems.filter((item) => item.id !== id);
 
@@ -73,6 +82,7 @@ const App = () => {
 
     const menuRef = ref(database, "menuItems");
 
+    // Remove the deleted menu item from Firebase
     set(menuRef, updatedMenuItems)
       .then(() => {
         console.log("Menu item deleted");
@@ -96,6 +106,7 @@ const App = () => {
 
     const menuRef = ref(database, "menuItems");
 
+    // Update the edited menu item in Firebase
     set(menuRef, updatedMenuItems)
       .then(() => {
         console.log("Menu item updated");

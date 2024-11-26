@@ -1,3 +1,12 @@
+/**
+ * @description
+ * A form component that allows users to add new menu items to the Restaurant Management System.
+ * Handles input for the item's name, price, and description. After submission, it triggers the onAdd callback to save the item.
+ *
+ * @author
+ * Ratanachat Saelee
+ */
+
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
@@ -6,6 +15,7 @@ const AddMenuItem = ({ onAdd }) => {
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
 
+  // Handle the form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     const formattedPrice = parseFloat(price).toFixed(2);
@@ -15,6 +25,7 @@ const AddMenuItem = ({ onAdd }) => {
     setDescription("");
   };
 
+  // Restrict price input to valid numbers (up to two decimal places)
   const handlePriceChange = (e) => {
     const value = e.target.value;
     if (/^\d*\.?\d{0,2}$/.test(value)) {
