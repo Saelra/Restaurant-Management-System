@@ -31,6 +31,11 @@ const Header = () => {
     }
   }, []);
 
+  // Scroll to the top of the page
+  const handleScrollToTop = () => {
+    window.scrollTo(0, 0);
+  };
+
   /**
    * handleLogout function
    * Signs the user out, removes user data from localStorage, and navigates to the login page.
@@ -57,10 +62,14 @@ const Header = () => {
             <>
               {/* Show navigation links for logged-in users */}
               <li>
-                <Link to="/add-menu">Add/Edit Menu Item</Link>
+                <Link to="/add-menu" onClick={handleScrollToTop}>
+                  Add/Edit Menu Item
+                </Link>
               </li>
               <li>
-                <Link to="/menu">View Menu</Link>
+                <Link to="/menu" onClick={handleScrollToTop}>
+                  View Menu
+                </Link>
               </li>
               <li>
                 <span>Welcome, {user.username}</span>
