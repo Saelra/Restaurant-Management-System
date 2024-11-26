@@ -1,14 +1,5 @@
-/**
- * @description
- * The main component that manages the menu items for the Restaurant Management System.
- * Handles fetching, adding, editing, and deleting menu items. Syncs data with Firebase and localStorage.
- * Access control and user authentication are also handled here.
- *
- * @author
- * Ratanachat Saelee
- */
-
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import MenuList from "./MenuList";
 import AddMenuItem from "./AddMenuItem";
 import EditMenuItem from "./EditMenuItem";
@@ -17,61 +8,52 @@ import { database } from "../firebase";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import Login from "./Login";
 
+/**
+ * Main Application Component
+ * Manages menu items with CRUD operations and authentication.
+ */
 const App = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [editingItem, setEditingItem] = useState(null);
   const [error, setError] = useState(null);
-  const [user, setUser] = useState(null); // User state to track authentication
+  const [user, setUser] = useState(null); // User authentication state
 
-  // Firebase Authentication check
+  // Monitor authentication state
   useEffect(() => {
     const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(user);
-      } else {
-        setUser(null);
-      }
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser || null);
     });
     return () => unsubscribe();
   }, []);
 
-  // Fetch menu items from Firebase and localStorage when the component mounts
+  // Fetch menu items from Firebase/localStorage on component mount
   useEffect(() => {
     const menuRef = ref(database, "menuItems");
-
-    const storedMenuItems = JSON.parse(localStorage.getItem("menuItems"));
-    if (storedMenuItems) {
-      setMenuItems(storedMenuItems);
-    }
+    const storedMenuItems = JSON.parse(localStorage.getItem("menuItems")) || [];
+    setMenuItems(storedMenuItems);
 
     onValue(
       menuRef,
       (snapshot) => {
         const data = snapshot.val() || [];
-        console.log("Fetched data from Firebase:", data);
         setMenuItems(data);
       },
-      (error) => {
-        console.error("Error fetching data from Firebase:", error);
+      (fetchError) => {
+        console.error("Error fetching data:", fetchError);
         setError("Failed to load menu items.");
       }
     );
   }, []);
 
-  // Sync menu items to Firebase and localStorage whenever menuItems changes
+  // Sync menu items to Firebase and localStorage
   useEffect(() => {
     if (menuItems.length > 0) {
       const menuRef = ref(database, "menuItems");
-
-      // Save the menu items to Firebase and localStorage
       set(menuRef, menuItems)
-        .then(() => {
-          console.log("Menu items added to Firebase");
-          localStorage.setItem("menuItems", JSON.stringify(menuItems));
-        })
-        .catch((err) => {
-          console.error("Error syncing menu items to Firebase:", err);
+        .then(() => localStorage.setItem("menuItems", JSON.stringify(menuItems)))
+        .catch((syncError) => {
+          console.error("Error syncing menu items:", syncError);
           setError("Failed to save menu items.");
         });
     }
@@ -79,66 +61,32 @@ const App = () => {
 
   // Add a new menu item
   const addMenuItem = (item) => {
-    try {
-      const formattedPrice = parseFloat(item.price).toFixed(2);
-      const newMenuItem = { ...item, price: formattedPrice, id: Date.now() };
-
-      setMenuItems((prevMenuItems) => [...prevMenuItems, newMenuItem]);
-    } catch (err) {
-      console.error("Error adding menu item:", err);
-      setError("Failed to add menu item.");
-    }
+    const formattedPrice = parseFloat(item.price).toFixed(2);
+    const newMenuItem = { ...item, price: formattedPrice, id: Date.now() };
+    setMenuItems((prevItems) => [...prevItems, newMenuItem]);
   };
 
-  // Delete a menu item by its ID
+  // Delete a menu item
   const deleteMenuItem = (id) => {
-    const updatedMenuItems = menuItems.filter((item) => item.id !== id);
-
-    localStorage.setItem("menuItems", JSON.stringify(updatedMenuItems));
-    setMenuItems(updatedMenuItems);
-
-    const menuRef = ref(database, "menuItems");
-
-    // Remove the deleted menu item from Firebase
-    set(menuRef, updatedMenuItems)
-      .then(() => {
-        console.log("Menu item deleted");
-      })
-      .catch((err) => {
-        console.error("Error deleting menu item:", err);
-        setError("Failed to delete menu item.");
-      });
+    const updatedItems = menuItems.filter((item) => item.id !== id);
+    setMenuItems(updatedItems);
   };
 
   // Save an edited menu item
   const saveMenuItem = (updatedItem) => {
-    const updatedMenuItems = menuItems.map((item) =>
+    const updatedItems = menuItems.map((item) =>
       item.id === updatedItem.id
         ? { ...updatedItem, price: parseFloat(updatedItem.price).toFixed(2) }
         : item
     );
-
-    setMenuItems(updatedMenuItems);
+    setMenuItems(updatedItems);
     setEditingItem(null);
-
-    const menuRef = ref(database, "menuItems");
-
-    // Update the edited menu item in Firebase
-    set(menuRef, updatedMenuItems)
-      .then(() => {
-        console.log("Menu item updated");
-      })
-      .catch((err) => {
-        console.error("Error saving menu item:", err);
-        setError("Failed to save menu item.");
-      });
   };
 
   return (
     <div className="container">
       <h1>Menu Management</h1>
-      {error && <div className="error-message">{error}</div>}{" "}
-      {/* Conditional Rendering based on user authentication */}
+      {error && <div className="error-message">{error}</div>}
       {!user ? (
         <Login />
       ) : (
@@ -157,6 +105,11 @@ const App = () => {
       )}
     </div>
   );
+};
+
+// PropTypes for App
+App.propTypes = {
+  user: PropTypes.object,
 };
 
 export default App;

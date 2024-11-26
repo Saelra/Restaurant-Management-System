@@ -16,15 +16,18 @@ import {
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
+import PropTypes from "prop-types";
 
 /**
  * Login Component
  * Renders the login interface and allows users to sign in with either GitHub or Google accounts.
  * Displays error messages if login fails.
  *
+ * @param {Object} props - Component props.
+ * @param {function} props.onLoginSuccess - Callback function to handle successful login.
  * @returns {JSX.Element} The login form or error message if login fails.
  */
-const Login = () => {
+const Login = ({ onLoginSuccess }) => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
@@ -40,10 +43,10 @@ const Login = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
-      localStorage.setItem(
-        "user",
-        JSON.stringify({ username: user.displayName, email: user.email })
-      );
+      const userData = { username: user.displayName, email: user.email };
+      localStorage.setItem("user", JSON.stringify(userData));
+
+      if (onLoginSuccess) onLoginSuccess(userData);
 
       navigate("/add-menu");
       window.location.reload();
@@ -64,10 +67,10 @@ const Login = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
-      localStorage.setItem(
-        "user",
-        JSON.stringify({ username: user.displayName, email: user.email })
-      );
+      const userData = { username: user.displayName, email: user.email };
+      localStorage.setItem("user", JSON.stringify(userData));
+
+      if (onLoginSuccess) onLoginSuccess(userData);
 
       navigate("/add-menu");
       window.location.reload();
@@ -79,11 +82,16 @@ const Login = () => {
   return (
     <div className="login">
       <h2>Login to Restaurant Management</h2>
-      {error && <p className="error">{error}</p>}{" "}
+      {error && <p className="error">{error}</p>}
       <button onClick={handleGithubLogin}>Login with GitHub</button>
-      <button onClick={handleGoogleLogin}>Login with Google</button>{" "}
+      <button onClick={handleGoogleLogin}>Login with Google</button>
     </div>
   );
+};
+
+// PropTypes validation
+Login.propTypes = {
+  onLoginSuccess: PropTypes.func,
 };
 
 export default Login;
