@@ -13,7 +13,6 @@ A full-stack web application built with React and Firebase to manage menu items 
 
 ## Table of Contents
 
-- [Prerequisites](#prerequisites)
 - [Setup](#setup)
 - [Usage Examples](#usage-examples)
 
