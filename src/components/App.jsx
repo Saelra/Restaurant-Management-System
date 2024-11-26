@@ -2,6 +2,7 @@
  * @description
  * The main component that manages the menu items for the Restaurant Management System.
  * Handles fetching, adding, editing, and deleting menu items. Syncs data with Firebase and localStorage.
+ * Access control and user authentication are also handled here.
  *
  * @author
  * Ratanachat Saelee
@@ -13,11 +14,27 @@ import AddMenuItem from "./AddMenuItem";
 import EditMenuItem from "./EditMenuItem";
 import { ref, onValue, set } from "firebase/database";
 import { database } from "../firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import Login from "./Login";
 
 const App = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [editingItem, setEditingItem] = useState(null);
   const [error, setError] = useState(null);
+  const [user, setUser] = useState(null); // User state to track authentication
+
+  // Firebase Authentication check
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   // Fetch menu items from Firebase and localStorage when the component mounts
   useEffect(() => {
@@ -121,17 +138,23 @@ const App = () => {
     <div className="container">
       <h1>Menu Management</h1>
       {error && <div className="error-message">{error}</div>}{" "}
-      {/* Display error message */}
-      {editingItem ? (
-        <EditMenuItem item={editingItem} onSave={saveMenuItem} />
+      {/* Conditional Rendering based on user authentication */}
+      {!user ? (
+        <Login />
       ) : (
-        <AddMenuItem onAdd={addMenuItem} />
+        <>
+          {editingItem ? (
+            <EditMenuItem item={editingItem} onSave={saveMenuItem} />
+          ) : (
+            <AddMenuItem onAdd={addMenuItem} />
+          )}
+          <MenuList
+            items={menuItems}
+            onEdit={setEditingItem}
+            onDelete={deleteMenuItem}
+          />
+        </>
       )}
-      <MenuList
-        items={menuItems}
-        onEdit={setEditingItem}
-        onDelete={deleteMenuItem}
-      />
     </div>
   );
 };
