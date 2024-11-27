@@ -31,7 +31,7 @@ const firebaseApp = initializeApp(firebaseConfig);
 const database = getDatabase(firebaseApp);
 const auth = getAuth(firebaseApp);
 const githubProvider = new GithubAuthProvider();
-const googleProvider = new GoogleAuthProvider(); // Initialize Google Auth Provider
+const googleProvider = new GoogleAuthProvider();
 
 /**
  * Signs in a user with GitHub.
@@ -41,7 +41,7 @@ const googleProvider = new GoogleAuthProvider(); // Initialize Google Auth Provi
 const signInWithGitHub = async () => {
   try {
     const result = await signInWithPopup(auth, githubProvider);
-    return result.user; // Returns the authenticated user
+    return result.user;
   } catch (error) {
     console.error("GitHub sign-in error:", error.message);
     throw new Error("Failed to sign in with GitHub");
@@ -56,7 +56,7 @@ const signInWithGitHub = async () => {
 const signInWithGoogle = async () => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
-    return result.user; // Returns the authenticated user
+    return result.user;
   } catch (error) {
     console.error("Google sign-in error:", error.message);
     throw new Error("Failed to sign in with Google");
@@ -87,7 +87,7 @@ const fetchMenuItems = async () => {
     const dbRef = ref(database, "menuItems");
     const snapshot = await get(dbRef);
     if (snapshot.exists()) {
-      return snapshot.val(); // Returns the data object
+      return snapshot.val();
     } else {
       console.log("No data available");
       return null;
@@ -108,7 +108,7 @@ const fetchMenuItems = async () => {
 const updateMenuItem = async (id, data) => {
   try {
     const dbRef = ref(database, "menuItems/" + id);
-    await set(dbRef, data); // Updates the data at the specified reference
+    await set(dbRef, data);
   } catch (error) {
     console.error("Error updating menu item:", error.message);
     throw new Error("Failed to update menu item");
