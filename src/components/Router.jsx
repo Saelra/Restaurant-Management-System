@@ -10,7 +10,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Header from "./Header";
 import Login from "./Login";
-import App from "./app";
+import App from "./App";
 import Menu from "./Menu";
 
 /**
